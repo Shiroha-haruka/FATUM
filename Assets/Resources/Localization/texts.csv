@@ -3,6 +3,11 @@ game.guide.click_danger,GameScene initial dialogue-box guide,「！」をクリ�
 tutorial.hover.suicide,GameScene first danger mark hover log,誰かが自殺を止めようとしている……,Someone is trying to prevent a suicide...
 tutorial.result.helped,GameScene first tutorial result after choosing Yes,自殺は間に合わなかった……,The suicide could not be prevented in time...
 tutorial.result.not_helped,GameScene first tutorial result after choosing No or timing out,自殺は防げたが、人身事故が発生した……,The suicide was prevented, but a traffic accident occurred...
+story.important_person_arrived,GameScene dialogue after the important person enters the cafe,人は大勢集まっています。誰かお偉いさんが突然街の有名なカフェを訪れているそうです。,"A large crowd has gathered. It seems that an important person has unexpectedly visited the city's famous cafe."
+story.gang_cars_appear,GameScene dialogue when the three gang cars appear,街のギャングは車3台でカフェの方向に向かっているそうです。ギャングの頭は先週大統領が追加した法のため逮捕されているようです。,"The city's gang appears to be heading toward the cafe in three cars. Their leader was reportedly arrested under a law introduced by the president last week."
+story.final_choice_1,GameScene final dialogue page 1,今のあなたには、出来事の行方を変える力があります。,You now have the power to change the course of events.
+story.final_choice_2,GameScene final dialogue page 2,偉大な一人を救うために、多くの罪のない人々を犠牲にしますか。それとも、罪のない人々を救うために、一人を犠牲にしますか。,"Will you sacrifice many innocent people to save one great person, or sacrifice one person to save the innocent?"
+story.final_choice_3,GameScene final dialogue page 3,すべての選択はあなたの手に委ねられています。プレイしていただき、ありがとうございました。,The choice is entirely in your hands. Thank you for playing.
 click.clicked_format,GameScene click history ({0}=object name),{0} をクリックしました！,Clicked {0}!
 
 tutorial.question.help,GameScene first tutorial question,助けますか？,Will you help?
@@ -11,8 +16,8 @@ common.no,GameScene tutorial and pause confirmation button,いいえ,No
 pause.return_title,GameScene pause confirmation,タイトルに戻りますか？,Return to the title screen?
 
 language.select_title,TitleScene language selection heading,言語を選択,Select Language
-language.japanese,TitleScene Japanese language button,日本語,Japanese
-language.english,TitleScene English language button,英語,English
+language.japanese,TitleScene Japanese language button,日本語,日本語
+language.english,TitleScene English language button,English,English
 
 story.main_heading,GameScene main-story heading,メインストーリー,MAIN STORY
 click.hover_format,GameScene upper hover status ({0}=object name),{0} にカーソルが合っています,Cursor is over {0}

@@ -48,6 +48,7 @@ public class TutorialManager : MonoBehaviour
 
     private bool human2Finished = false;
     private bool carFinished = false;
+    private bool collisionVictimsFinished = false;
     private bool resultFinished = false;
 
 
@@ -94,6 +95,11 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("チュートリアル質問を表示");
 
         choiceFinished = false;
+
+        if (ClickManager.Instance != null)
+        {
+            ClickManager.Instance.HideDialogueBox();
+        }
 
         if (questionPanel != null)
         {
@@ -205,6 +211,8 @@ public class TutorialManager : MonoBehaviour
         {
             GameManager.Instance
                 .TutorialSelectYes();
+            GameManager.Instance
+                .StartSecondTutorial();
         }
     }
 
@@ -252,6 +260,8 @@ public class TutorialManager : MonoBehaviour
         {
             GameManager.Instance
                 .TutorialSelectNo();
+            GameManager.Instance
+                .StartSecondTutorial();
         }
     }
 
@@ -297,6 +307,8 @@ public class TutorialManager : MonoBehaviour
         {
             GameManager.Instance
                 .TutorialSelectNo();
+            GameManager.Instance
+                .StartSecondTutorial();
         }
     }
 
@@ -309,6 +321,7 @@ public class TutorialManager : MonoBehaviour
     {
         human2Finished = false;
         carFinished = false;
+        collisionVictimsFinished = false;
         resultFinished = false;
     }
 
@@ -344,6 +357,13 @@ public class TutorialManager : MonoBehaviour
         CheckResultFinished();
     }
 
+    public void CollisionVictimsRouteFinished()
+    {
+        collisionVictimsFinished = true;
+        Debug.Log("Collision victims route finished.");
+        CheckResultFinished();
+    }
+
 
     // =========================================
     // 両方終了したか確認
@@ -358,12 +378,13 @@ public class TutorialManager : MonoBehaviour
 
 
         if (human2Finished &&
-            carFinished)
+            carFinished &&
+            collisionVictimsFinished)
         {
             resultFinished = true;
 
             Debug.Log(
-                "Human2とCarの両方が終了！"
+                "Second tutorial routes finished."
             );
 
             StartCoroutine(
@@ -482,25 +503,12 @@ public class TutorialManager : MonoBehaviour
             );
         }
 
-
-    }
-
-    public void BeginSecondTutorial()
-    {
-        if (GameManager.Instance == null ||
-            GameManager.Instance.secondTutorialStarted)
+        if (GameManager.Instance != null)
         {
-            return;
+            GameManager.Instance.StartMainScenario();
         }
 
-        if (nextDangerMark != null)
-        {
-            nextDangerMark.SetActive(false);
-        }
-
-        GameManager.Instance.StartSecondTutorial();
     }
-
 
     // =========================================
     // フェードアウト

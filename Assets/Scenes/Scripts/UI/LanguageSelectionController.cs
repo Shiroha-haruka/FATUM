@@ -26,6 +26,8 @@ public class LanguageSelectionController : MonoBehaviour
 
     private void Start()
     {
+        SetNativeLanguageLabels();
+
         if (languageSelection == null)
         {
             Debug.LogError("LanguageSelectionが設定されていません。");
@@ -67,6 +69,8 @@ public class LanguageSelectionController : MonoBehaviour
     {
         Debug.Log("ShowLanguageSelection called.");
 
+        SetNativeLanguageLabels();
+
         if (languageSelection == null || selectionGroup == null)
         {
             Debug.LogError("言語選択UIの参照が不足しています。");
@@ -85,6 +89,19 @@ public class LanguageSelectionController : MonoBehaviour
 
         languageSelection.SetActive(true);
         StartCoroutine(FadeIn());
+    }
+
+    private void SetNativeLanguageLabels()
+    {
+        if (japaneseText != null)
+        {
+            japaneseText.text = "日本語";
+        }
+
+        if (englishText != null)
+        {
+            englishText.text = "English";
+        }
     }
 
     private IEnumerator FadeIn()

@@ -704,6 +704,7 @@ MonoBehaviour:
   tutorialHelped: 0
   tutorialCompleted: 0
   tutorialFinished: 0
+  secondTutorialStarted: 0
   mainScenarioStarted: 0
 --- !u!4 &504957118
 Transform:

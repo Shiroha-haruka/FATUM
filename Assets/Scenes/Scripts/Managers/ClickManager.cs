@@ -12,6 +12,9 @@ public class ClickManager : MonoBehaviour
     public TextMeshProUGUI hoverText;
     public TextMeshProUGUI clickText;
 
+    private GameObject dialogueBox;
+    private bool dialogueSuppressed;
+
     public int maxMessageCount = 3;
 
     private List<string> messageLog = new List<string>();
@@ -30,6 +33,8 @@ public class ClickManager : MonoBehaviour
     private string guideMessage = "";
 
     private Coroutine eventMessageCoroutine;
+    private string[] pagedEventMessages;
+    private int pagedEventMessageIndex;
 
 
     private void Awake()
@@ -41,6 +46,11 @@ public class ClickManager : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+
+        if (clickText != null && clickText.transform.parent != null)
+        {
+            dialogueBox = clickText.transform.parent.gameObject;
+        }
 
         if (LocalizationManager.Instance != null)
         {
@@ -71,6 +81,12 @@ public class ClickManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (pagedEventMessages != null)
+            {
+                ShowNextEventMessagePage();
+                return;
+            }
+
             CheckClick(target);
         }
     }
@@ -192,6 +208,8 @@ public class ClickManager : MonoBehaviour
 
     public void ShowEventMessage(string message, float duration = 5f)
     {
+        dialogueSuppressed = false;
+
         if (eventMessageCoroutine != null)
         {
             StopCoroutine(eventMessageCoroutine);
@@ -199,6 +217,55 @@ public class ClickManager : MonoBehaviour
 
         eventMessageCoroutine =
             StartCoroutine(ShowEventMessageCoroutine(message, duration));
+    }
+
+    public void HideDialogueBox()
+    {
+        dialogueSuppressed = true;
+        UpdateClickText();
+    }
+
+    public void ShowPagedEventMessageKeys(params string[] messageKeys)
+    {
+        if (messageKeys == null || messageKeys.Length == 0 ||
+            LocalizationManager.Instance == null)
+        {
+            return;
+        }
+
+        if (eventMessageCoroutine != null)
+        {
+            StopCoroutine(eventMessageCoroutine);
+            eventMessageCoroutine = null;
+        }
+
+        pagedEventMessages = new string[messageKeys.Length];
+        for (int i = 0; i < messageKeys.Length; i++)
+        {
+            pagedEventMessages[i] = LocalizationManager.Instance.Get(messageKeys[i]);
+        }
+
+        pagedEventMessageIndex = 0;
+        dialogueSuppressed = false;
+        eventMessage = pagedEventMessages[0];
+        UpdateClickText();
+    }
+
+    private void ShowNextEventMessagePage()
+    {
+        pagedEventMessageIndex++;
+
+        if (pagedEventMessageIndex >= pagedEventMessages.Length)
+        {
+            pagedEventMessages = null;
+            eventMessage = "";
+        }
+        else
+        {
+            eventMessage = pagedEventMessages[pagedEventMessageIndex];
+        }
+
+        UpdateClickText();
     }
 
 
@@ -228,34 +295,33 @@ public class ClickManager : MonoBehaviour
         if (clickText == null)
             return;
 
-        clickText.text = "";
+        string displayText = "";
 
-
-        // 結果文章を最優先
         if (!string.IsNullOrEmpty(eventMessage))
         {
-            clickText.text = eventMessage;
-            return;
+            displayText = eventMessage;
+        }
+        else if (!string.IsNullOrEmpty(hoverEventMessage))
+        {
+            displayText = hoverEventMessage;
+        }
+        else if (messageLog.Count > 0)
+        {
+            displayText = string.Join("\n", messageLog);
+        }
+        else
+        {
+            displayText = guideMessage;
         }
 
+        clickText.text = displayText;
 
-        // Hover説明
-        if (!string.IsNullOrEmpty(hoverEventMessage))
+        if (dialogueBox != null)
         {
-            clickText.text = hoverEventMessage;
-            return;
-        }
-
-
-        // 通常のクリック履歴
-        foreach (string message in messageLog)
-        {
-            clickText.text += message + "\n";
-        }
-
-        if (messageLog.Count == 0)
-        {
-            clickText.text = guideMessage;
+            dialogueBox.SetActive(
+                !dialogueSuppressed &&
+                !string.IsNullOrWhiteSpace(displayText)
+            );
         }
     }
 

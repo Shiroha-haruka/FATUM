@@ -36,7 +36,8 @@ public class PictogramMover : MonoBehaviour
     {
         None,
         Human2,
-        Car
+        Car,
+        CollisionVictims
     }
 
 
@@ -446,6 +447,11 @@ public class PictogramMover : MonoBehaviour
                 TutorialManager.Instance
                     .CarRouteFinished();
 
+                break;
+
+            case TutorialResultObject.CollisionVictims:
+                TutorialManager.Instance
+                    .CollisionVictimsRouteFinished();
                 break;
         }
     }
