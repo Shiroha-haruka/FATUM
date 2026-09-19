@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     // 結果アニメーションまで全部終了したか
     public bool tutorialFinished = false;
 
+    [Header("Second Tutorial")]
+    public bool secondTutorialStarted = false;
+
     [Header("メインシナリオ")]
     public bool mainScenarioStarted = false;
 
@@ -70,6 +73,17 @@ public class GameManager : MonoBehaviour
         Debug.Log("チュートリアル完全終了！");
     }
 
+    public void StartSecondTutorial()
+    {
+        if (secondTutorialStarted)
+        {
+            return;
+        }
+
+        secondTutorialStarted = true;
+        Debug.Log("Second tutorial started.");
+    }
+
 
     public void StartMainScenario()
     {
@@ -95,6 +109,7 @@ public class GameManager : MonoBehaviour
         tutorialHelped = false;
         tutorialCompleted = false;
         tutorialFinished = false;
+        secondTutorialStarted = false;
 
         mainScenarioStarted = false;
 

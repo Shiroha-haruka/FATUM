@@ -389,14 +389,14 @@ public class TutorialManager : MonoBehaviour
             if (GameManager.Instance.tutorialHelped)
             {
                 ClickManager.Instance.ShowEventMessage(
-                    "自殺は間に合わなかった……",
+                    LocalizationManager.Instance.Get("tutorial.result.helped"),
                     5f
                 );
             }
             else
             {
                 ClickManager.Instance.ShowEventMessage(
-                    "自殺は防げたが、人身事故が発生した……",
+                    LocalizationManager.Instance.Get("tutorial.result.not_helped"),
                     5f
                 );
             }
@@ -483,15 +483,22 @@ public class TutorialManager : MonoBehaviour
         }
 
 
-        // =====================================
-        // メインシナリオ開始
-        // =====================================
+    }
 
-        if (GameManager.Instance != null)
+    public void BeginSecondTutorial()
+    {
+        if (GameManager.Instance == null ||
+            GameManager.Instance.secondTutorialStarted)
         {
-            GameManager.Instance
-                .StartMainScenario();
+            return;
         }
+
+        if (nextDangerMark != null)
+        {
+            nextDangerMark.SetActive(false);
+        }
+
+        GameManager.Instance.StartSecondTutorial();
     }
 
 

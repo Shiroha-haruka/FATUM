@@ -1,17 +1,24 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class StartScreenManager : MonoBehaviour
 {
+    [SerializeField]
+    private LanguageSelectionController languageSelectionController;
+
     public void StartGame()
     {
-        // ゲーム開始フラグをON
-        if (GameManager.Instance != null)
+        
+        //ゲーム開始時に言語選択画面を表示する
+        if (languageSelectionController == null)
         {
-            GameManager.Instance.StartGame();
+            languageSelectionController = FindAnyObjectByType<LanguageSelectionController>();
         }
 
-        // GameSceneへ移動
-        SceneManager.LoadScene("GameScene");
+        if (languageSelectionController == null)
+        {
+            return;
+        }
+
+        languageSelectionController.ShowLanguageSelection();
     }
 }

@@ -2005,7 +2005,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &612304982
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3355,7 +3355,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1058966706
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3461,7 +3461,7 @@ MonoBehaviour:
   - {fileID: 1389019471}
   - {fileID: 1572941164}
   - {fileID: 1975213197}
-  nextDangerMark: {fileID: 0}
+  nextDangerMark: {fileID: 1847621565}
 --- !u!4 &1067940494
 Transform:
   m_ObjectHideFlags: 0
@@ -4443,8 +4443,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 321.77246, y: -246.98}
-  m_SizeDelta: {x: 307.0817, y: 35.366}
+  m_AnchoredPosition: {x: 324.12, y: -269.16397}
+  m_SizeDelta: {x: 307.082, y: 32.867}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1354230129
 MonoBehaviour:
@@ -5716,7 +5716,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1067940493}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: ShowQuestion
+        m_MethodName: BeginSecondTutorial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

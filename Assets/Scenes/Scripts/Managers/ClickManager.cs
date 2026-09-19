@@ -26,6 +26,9 @@ public class ClickManager : MonoBehaviour
     // 結果などの固定メッセージ
     private string eventMessage = "";
 
+    // ゲーム開始時の操作案内
+    private string guideMessage = "";
+
     private Coroutine eventMessageCoroutine;
 
 
@@ -39,11 +42,15 @@ public class ClickManager : MonoBehaviour
     {
         mainCamera = Camera.main;
 
+        if (LocalizationManager.Instance != null)
+        {
+            guideMessage = LocalizationManager.Instance.Get("game.guide.click_danger");
+        }
+
         // 非表示中(GameRootなど)も取得
-        clickBoxObjects = FindObjectsByType<ClickBoxObject>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None
-        );
+        clickBoxObjects = FindObjectsByType<ClickBoxObject>(FindObjectsInactive.Include);
+
+        UpdateClickText();
     }
 
 
@@ -98,9 +105,10 @@ public class ClickManager : MonoBehaviour
         {
             if (hoverObject != null)
             {
-                hoverText.text =
-                    hoverObject.gameObject.name +
-                    " にカーソルが合っています";
+                hoverText.text = LocalizationManager.Instance.GetFormat(
+                    "click.hover_format",
+                    hoverObject.gameObject.name
+                );
             }
             else
             {
@@ -119,7 +127,9 @@ public class ClickManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(hoverObject.hoverLogMessage))
             {
-                hoverEventMessage = hoverObject.hoverLogMessage;
+                hoverEventMessage = LocalizationManager.Instance.LocalizeSource(
+                    hoverObject.hoverLogMessage
+                );
             }
         }
 
@@ -138,13 +148,15 @@ public class ClickManager : MonoBehaviour
         if (clickedObject == null)
             return;
 
+        guideMessage = "";
         clickedObject.Click();
 
         if (clickText != null && clickedObject.showClickMessage)
         {
-            string message =
-                clickedObject.gameObject.name +
-                " をクリックしました！";
+            string message = LocalizationManager.Instance.GetFormat(
+                "click.clicked_format",
+                clickedObject.gameObject.name
+            );
 
             StartCoroutine(ShowClickText(message));
         }
@@ -239,6 +251,11 @@ public class ClickManager : MonoBehaviour
         foreach (string message in messageLog)
         {
             clickText.text += message + "\n";
+        }
+
+        if (messageLog.Count == 0)
+        {
+            clickText.text = guideMessage;
         }
     }
 

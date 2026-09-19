@@ -1,0 +1,103 @@
+FATUM 変更内容
+作成日: 2026-09-19
+
+【今回追加した機能】
+1. タイトル画面で START を押した後、画面を黒へフェードアウトするようにしました。
+2. フェード後に「日本語 / English」の言語選択画面を表示するようにしました。
+3. 言語を選択すると再度フェードアウトし、GameScene を読み込んだ後にフェードインします。
+4. ゲーム内の表示文章を CSV 表から読み込み、選択した言語で表示する仕組みを追加しました。
+5. CSV 表には key、使用場所、日本語、英語の4列を用意しました。
+6. GameScene と SampleScene に直接設定されている TextMesh Pro の文章も、シーン読み込み時に自動で翻訳します。
+
+【追加したファイル】
+■ Assets/Scenes/Scripts/Managers/LocalizationManager.cs
+  14行目: LocalizationManager クラスを追加。
+  34行目: シーン読み込み前に自動生成する処理を追加。
+  74行目: 選択言語を保存して表示を更新する SetLanguage を追加。
+  80行目: key から選択中の言語の文章を取得する Get を追加。
+  101行目: シーンに保存済みの日本語・英語から対応 key を検索する処理を追加。
+  111行目: TextMesh Pro の文章をシーン単位で一括更新する処理を追加。
+  124行目: Resources/Localization/texts.csv の読み込み処理を追加。
+  166行目: ダブルクォート、カンマ、改行に対応する CSV 解析処理を追加。
+
+■ Assets/Scenes/Scripts/UI/LanguageSelectionController.cs
+  6行目: 言語選択画面とフェードを制御するクラスを追加。
+  17行目: タイトルの START ボタンから画面を開く Show を追加。
+  49行目: タイトルから言語選択画面へ切り替えるフェード処理を追加。
+  61～78行目: 日本語・英語ボタンの明示的な選択処理とログを追加。
+  80～123行目: 言語決定、GameScene の非同期読み込み、失敗時のエラー処理、フェードイン処理を追加。
+  143行目: 言語選択 UI を実行時に生成する処理を追加。
+  217行目: 日本語・English の選択ボタン生成処理を追加。
+
+■ Assets/Resources/Localization/texts.csv
+  全16項目を登録。
+  列構成: key / usage（使用場所）/ japanese / english
+  現在登録済みの対象:
+  ・言語選択画面
+  ・Yes / No ボタン
+  ・チュートリアルの質問、Hover説明、結果文章
+  ・メインストーリー見出し
+  ・タイトルへ戻る確認画面
+  ・Hover状態とクリック履歴
+  ・SampleScene のカフェ、噴水、住宅街
+
+【変更した既存ファイル】
+■ Assets/Scenes/Scripts/Managers/StartScreenManager.cs
+  6～8行目:
+  START ボタンで直ちに GameScene を読み込む旧処理を削除し、
+  LanguageSelectionController.Show() を呼ぶ処理へ変更。
+
+■ Assets/Scenes/Scripts/Managers/ClickManager.cs
+  43行目:
+  Unity 6.4 で非推奨になった FindObjectsByType の呼び出しを新しい形式へ変更。
+  98～102行目:
+  Hover状態の文章を CSV の click.hover_format から取得するように変更。
+  120～122行目:
+  Inspector に保存されている Hover説明を選択言語へ変換するように変更。
+  145～148行目:
+  クリック履歴を CSV の click.clicked_format から取得するように変更。
+
+■ Assets/Scenes/Scripts/Managers/TutorialManager.cs
+  392行目:
+  「はい」側の結果文章を tutorial.result.helped から取得するように変更。
+  399行目:
+  「いいえ / 時間切れ」側の結果文章を tutorial.result.not_helped から取得するように変更。
+
+【変更していないもの】
+・GameScene.unity、TitleScene.unity の配置や Inspector 設定は変更していません。
+・タイトル画面の文字は PNG 画像になっているため、今回の CSV 翻訳対象には含めていません。
+・NotoSansJP-Medium SDF.asset と FATUM.slnx は作業開始前から変更済み / 未追跡だったため、今回触っていません。
+
+【確認結果】
+・dotnet build Assembly-CSharp.csproj: 成功
+・コンパイルエラー: 0
+・警告: 0
+・git diff --check: 空白エラーなし
+
+【Unity Editor で確認してほしい項目】
+1. TitleScene を再生し、START 後にフェードと言語選択画面が表示されること。
+2. 日本語を選び、GameScene の質問・ボタン・ログが日本語になること。
+3. 再度再生して English を選び、同じ表示が英語になること。
+4. 1920x1080 以外の解像度でもボタンと文字が画面内に収まること。
+
+【文章を追加する方法】
+Assets/Resources/Localization/texts.csv に新しい行を追加します。
+コードから表示する場合:
+LocalizationManager.Instance.Get("追加したkey")
+
+既存の TextMesh Pro を自動翻訳する場合:
+CSV の japanese 列に、Scene の TextMesh Pro に設定した日本語と同じ文章を登録します。
+
+【第2チュートリアルへの接続】
+■ Assets/Scenes/Scripts/Managers/GameManager.cs
+  21行目: 第2チュートリアル開始状態 secondTutorialStarted を追加。
+  76～85行目: StartSecondTutorial() を追加。
+  112行目: ゲームリセット時に第2チュートリアル状態も戻す処理を追加。
+
+■ Assets/Scenes/Scripts/Managers/TutorialManager.cs
+  第1チュートリアル終了時の StartMainScenario() 呼び出しを削除。
+  488～502行目: DangerMark 2 をクリックした時に第2チュートリアルを開始する処理を追加。
+
+■ Assets/Scenes/GameScene.unity
+  TutorialManager の nextDangerMark に DangerMark 2 を設定。
+  DangerMark 2 のクリック処理を ShowQuestion から BeginSecondTutorial に変更。
